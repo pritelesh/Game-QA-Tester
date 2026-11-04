@@ -2,6 +2,7 @@ import About from "@/components/About";
 import Contact from "@/components/Contact";
 import Education from "@/components/Education";
 import Experience from "@/components/Experience";
+import GameGallery from "@/components/GameGallery";
 import Header from "@/components/Header";
 import Skills from "@/components/Skills";
 import Work from "@/components/Work";
@@ -36,6 +37,9 @@ export default function Home() {
 
           {/* Professional history cards */}
           <Experience />
+
+          {/* Spotlight gallery built from /public/games */}
+          <GameGallery />
 
           {/* Skills & tech stack grid */}
           <Skills />
