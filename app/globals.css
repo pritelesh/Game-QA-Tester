@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global dark canvas — must exactly match the image-sequence background. */
+html {
+  background-color: #121212;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #121212;
+  color: #e5e5e5;
+}
+
+::selection {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #121212;
+}
+
+/* PerspectiveGrid — mouse-follow ripple animation */
+.pg-cursor {
+  z-index: 5;
+  background: radial-gradient(
+    140px circle at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.1),
+    transparent 70%
+  );
+}
+
+.pg-ripple {
+  left: var(--mx);
+  top: var(--my);
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  margin-top: -14px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.15);
+  opacity: 0;
+  z-index: 6;
+}
+
+@keyframes pg-ripple {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(26);
+    opacity: 0;
+  }
+}
+
+/* FlipText — per-character 3D flip using --flip-* custom properties */
+.flip-char {
+  animation: flip-char var(--flip-duration, 2.2s) infinite;
+  animation-delay: var(--flip-delay, 0s);
+  animation-iteration-count: var(--flip-iteration, infinite);
+}
+
+@keyframes flip-char {
+  0% {
+    transform: rotateX(0deg);
+  }
+  100% {
+    transform: rotateX(360deg);
+  }
+}
+
+/* MorphText — static single-phrase mode stays visible; adds a gentle
+   recurring blur pulse instead of cycling words in/out. */
+.exp-morph-heading .morph-word {
+  opacity: 1 !important;
+  animation-name: exp-morph-pulse !important;
+  animation-duration: 9s !important;
+  animation-delay: 0s !important;
+}
+
+@keyframes exp-morph-pulse {
+  0%,
+  90%,
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate(-50%, -50%) scale(1);
+  }
+  95% {
+    opacity: 1;
+    filter: blur(12px);
+    transform: translate(-50%, -50%) scale(0.97);
+  }
+}
+
+/* MorphText — cycling multi-word mode keyframes */
+.morph-word-rotate {
+  height: 1.2em;
+  min-width: 14ch;
+}
+
+@keyframes morph-word-rotate {
+  0% {
+    opacity: 0;
+    filter: blur(20px);
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  5% {
+    opacity: 0.5;
+    filter: blur(10px);
+  }
+  15%, 35% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate(-50%, -50%) scale(1);
+  }
+  45% {
+    opacity: 0.5;
+    filter: blur(10px);
+  }
+  50%, 100% {
+    opacity: 0;
+    filter: blur(20px);
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+@keyframes morph-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Contact heading — gentle always-on float + staggered lift on hover. */
+@keyframes contact-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.contact-vibe {
+  animation: contact-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.contact-vibe--2 {
+  animation-delay: 1.4s;
+}
+
+.contact-word {
+  display: inline-block;
+  transform: translateY(0);
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.3s ease,
+    text-shadow 0.3s ease;
+}
+
+.contact-headline:hover .contact-word {
+  transform: translateY(-10px);
+}
+
+/* Accent line — animated gradient shimmer alongside the lift. */
+.contact-word--accent {
+  color: rgba(255, 255, 255, 0.55);
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0.4)
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation:
+    contact-float 6s ease-in-out infinite 1.4s,
+    contact-shimmer 4s linear infinite;
+}
+
+@keyframes contact-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.contact-headline:hover .contact-word--accent {
+  color: inherit;
+  -webkit-text-fill-color: rgba(255, 255, 255, 1);
+}
